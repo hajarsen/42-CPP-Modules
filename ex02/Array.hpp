@@ -24,7 +24,7 @@ public:
     {
         if (arraySize)
         {
-            data = new T[arraySize];
+            data = new T[arraySize]();
             for (unsigned int i = 0; i < arraySize; ++i)
                 data[i] = other.data[i];
         }
