@@ -1,88 +1,87 @@
 *This project has been created as part of the 42 curriculum by hsennane.*
 
-# CPP Module 03
+# CPP03 — Inheritance and Class Hierarchies
 
 ## Description
 
-**CPP Module 03** focuses on **Inheritance, derived classes and construction order**.
+CPP03 introduces inheritance through game-style characters that can attack, take damage, and repair themselves. Derived classes specialize the state and behavior of a common base.
 
-This module builds a family of simple game-like classes to illustrate single inheritance, reused state, overridden behavior, and constructors/destructors across a class hierarchy.
+Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
 
 ## Instructions
 
-### Building and Running
+### Build and run
 
-Requires a C++ compiler and GNU Make. Exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`.
+These exercises use **C++98**, with `-Wall -Wextra -Werror -std=c++98` in their Makefiles. They are independent executables compiled in their respective folders.
 
 ```bash
 git clone https://github.com/hajarsen/CPP03.git
-cd CPP03/ex00
+cd CPP03
+cd ex00
 make
 ./ClapTrap
+cd ../ex01
+make
+./ScavTrap
 ```
 
-Run `make clean`, `make fclean` or `make re` inside an exercise directory. Exercises are separate programs, so compile them individually rather than expecting one executable at the repository root.
+Inside each exercise, use `make` to compile, `make clean` to remove objects, `make fclean` to remove the executable, or `make re` to rebuild. Check each Makefile for its executable name.
 
 ### Exercises
 
-| Directory | Objective |
-|---|---|
-| `ex00` | **ClapTrap:** Implement a base character with attack, damage, repair, and resource tracking. |
-| `ex01` | **ScavTrap:** Derive ScavTrap from ClapTrap and add specialized behavior. |
-| `ex02` | **FragTrap:** Introduce FragTrap and compare its behavior with the other classes. |
+| Folder | Topic | Purpose |
+|---|---|---|
+| `ex00` | **ClapTrap** | Manage hit points, energy points, and attacks. |
+| `ex01` | **ScavTrap** | Derive from ClapTrap and add gate-keeper behavior. |
+| `ex02` | **FragTrap** | Add another specialized derived class. |
 
-### Suggested Tests
+## Resources — Understand the Concepts
 
-Run each exercise and inspect constructor/destructor messages. Test attacks, taking damage, repairs, and operations after resources are exhausted.
+### 1. Base and derived classes
 
-These are suggested manual checks, **not verified automated test results**.
+`ClapTrap` defines shared data and actions; `ScavTrap` and `FragTrap` extend that base type. Inheritance is useful when classes share a common interface and behavior but need different defaults or specialized methods.
 
-## Resources
+### 2. Object construction order
 
-Below are the key ideas with simplified diagrams, following the educational structure of the NetPractice README.
+When a `ScavTrap` is created, its `ClapTrap` base part is initialized first. When it is destroyed, the derived destructor runs before the base destructor. Reading printed constructor/destructor messages helps trace this sequence.
 
----
+### 3. State transitions
 
-### Inheritance
+The ex00 `ClapTrap` begins with 10 hit points, 10 energy points and 0 attack damage. Attacking or repairing uses an energy point and checks whether it is dead or out of energy. `takeDamage()` reduces hit points without allowing negative health. `ScavTrap` sets its own initial values in its constructors.
 
-A derived class can reuse fields and methods from a base class; the derived class can specialize behavior.
-
-### Construction and Destruction
-
-Base subobjects are initialized before the derived object. Destruction occurs in the opposite order.
-
-### State Transitions
-
-Attacking and repairing change energy or health state. Tests should cover exhausted energy, zero hit points, and repeated actions.
-
-
-### Concept Diagram
+### How it works
 
 ```text
-         ClapTrap
-         /     \
-        /       \
-   ScavTrap   FragTrap
+             ClapTrap
+             /     \
+       ScavTrap   FragTrap
 
-Base constructor → Derived constructor
-Derived destructor → Base destructor
+Attack: alive? → energy left? → spend 1 energy
+Damage: reduce HP, stop at 0
+Repair: alive + energy? → increase HP
 ```
 
----
+## Practice and Testing
 
-## 🎯 Learning Checklist
+Trace constructor order in ex01/ex02. Try an attack with no energy, repair after reaching zero health, and repeated damage. Compare default health/energy values and specialized methods across classes.
 
-- Explain the purpose of every source file and the classes/functions defined in it.
-- Compile with the project's C++98 warning flags.
-- Test normal input, empty or invalid input, and boundary cases.
-- Check resource cleanup, copying, and object lifetime where applicable.
+**What to watch for:** Health and energy counters are ordinary state variables; they are not an entire game engine. The example methods report actions through terminal output.
 
-### Useful Links
+The suggestions above are for your own testing; no automated results are claimed here.
+
+### Questions to consider
+
+- What does this exercise add compared with the previous one?
+- Which parts of the code manage data, and which perform operations?
+- How do errors and boundary cases affect the results?
+- Could you explain the diagram and the output in a 42 evaluation?
+
+## Useful Resources
 
 - [C++ language reference](https://en.cppreference.com/w/cpp)
-- [C++ classes and objects](https://en.cppreference.com/w/cpp/language/classes)
+- [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
 - [GNU Make manual](https://www.gnu.org/software/make/manual/)
 
 ### AI Usage
 
-AI assistance was used to **organize this README, explain C++ concepts, and prepare educational diagrams**. The original C++ source code was not changed as part of this documentation update.
+AI assistance was used to organize the documentation, clarify concepts and prepare examples. **Source code was not changed** by this README update.
