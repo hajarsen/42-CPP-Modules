@@ -22,7 +22,7 @@ make
 ./whatever
 cd ../ex02
 make
-./Array
+./array
 ```
 
 If an exercise's executable name differs, check that exercise's Makefile. Use `make` to build, `make clean` to remove object files, `make fclean` to remove the executable, or `make re` to rebuild.
