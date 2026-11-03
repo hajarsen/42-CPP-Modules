@@ -1,18 +1,18 @@
 *This project has been created as part of the 42 curriculum by hsennane.*
 
-# CPP Module 08 — Templated Containers and Iterators
+# CPP08 — STL Containers, Algorithms and Iterators
 
 ## Description
 
-This module introduces the **Standard Template Library (STL)**, iterators, algorithms, and containers. The exercises implement an element search, a span calculator, and an iterable stack.
+CPP08 makes practical use of the C++ Standard Template Library (STL): searching ranges, calculating numerical spans, and making a stack iterable.
 
-The exercises are independent programs and are stored in `ex00`, `ex01`, and `ex02`.
+This README explains **what each exercise demonstrates**, the key ideas behind the code, and ways to explore them yourself.
 
 ## Instructions
 
-### Building the Project
+### Build and run
 
-The exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`. You need a C++ compiler and `make`.
+The exercises use **C++98** (`-Wall -Wextra -Werror -std=c++98`). Each folder builds a separate executable.
 
 ```bash
 git clone https://github.com/hajarsen/CPP08.git
@@ -20,76 +20,65 @@ cd CPP08
 cd ex00
 make
 ./easyfind
+cd ../ex01
+make
+./Span
 ```
 
-To try another exercise, change into its directory, run `make`, and check its Makefile for the executable name. The common targets are `make`, `make clean`, `make fclean`, and `make re`.
+If an exercise's executable name differs, check that exercise's Makefile. Use `make` to build, `make clean` to remove object files, `make fclean` to remove the executable, or `make re` to rebuild.
 
 ### Exercises
 
-| Exercise | Project | Purpose |
+| Folder | Topic | What it does |
 |---|---|---|
-| `ex00` | **Easyfind** | Search for an integer in a container using iterators and standard algorithms. |
-| `ex01` | **Span** | Store integers and compute shortest and longest spans. |
-| `ex02` | **MutantStack** | Extend a stack with iterator access to its underlying container. |
+| `ex00` | **Easyfind** | Search for an integer using a standard algorithm. |
+| `ex01` | **Span** | Track numbers and compute minimum and maximum distances. |
+| `ex02` | **MutantStack** | Extend a stack adaptor with iteration support. |
 
-### Suggested Tests
+## Resources — Key Concepts
 
-Try searching for present and missing values, spans containing fewer than two numbers, duplicate numbers, large ranges, and iterating through a MutantStack after push/pop operations.
+### 1. Containers and iterators
 
-These are **suggested manual tests**; they have not been executed as part of this documentation update.
+Containers own elements; iterators identify positions in a range, commonly `[begin(), end())`. Algorithms such as `std::find` operate on these iterator ranges, allowing similar code to work with different containers.
 
-## Resources
+### 2. How Span works
 
-The following sections explain the core concepts with simplified examples and diagrams, following the style of the NetPractice README.
+`Span` stores values in a vector with a maximum capacity. To calculate the shortest span, it copies and sorts the values, then compares neighboring differences. The longest span is simply max minus min. Both calculations require at least two values.
 
----
+### 3. Why sorting helps the shortest span
 
-### 🔎 Algorithms and Iterators
+For sorted values `[2, 6, 9, 20]`, the adjacent gaps are 4, 3 and 11, so the shortest span is **3**; the longest span is **18**. You do not need to compare every pair once values are in sorted order.
 
-Standard algorithms work with iterator ranges rather than directly depending on one container type.
+### 4. Why MutantStack?
 
-### 📏 Span Calculations
+`std::stack` is an adaptor exposing `push`, `pop`, and `top`, but no public iterators. The `MutantStack` class derives from `std::stack` and exposes `begin()` and `end()` using the protected underlying container `c`.
 
-For a sequence of numbers, shortest span is the minimum difference between adjacent values after sorting; longest span is max minus min.
-
-### 📚 Iterable Stacks
-
-A regular stack exposes push/pop/top, while a MutantStack adds begin/end iterators to traverse its underlying container.
-
-
-### Concept Diagram
+### Visual summary
 
 ```text
-       STL container
-      [3, 7, 10, 14]
-            │
-       begin() → end()
-            │
-      iterator traversal
-            │
-          std::find
-            │
-      value or not found
+Span values: 20 2 9 6
+     │ sort copy
+     ▼
+     2 --4-- 6 --3-- 9 --11-- 20
+     shortest = 3 / longest = 18
+
+MutantStack ─► underlying deque ─► iterators
 ```
 
----
+## Tests to Try
 
-## 🎯 Learning and Evaluation Tips
+Search for a present and missing value in easyfind. For Span, try zero/one item, full capacity, duplicate values and a very large number range. For MutantStack, compare normal stack access with an iterator loop.
 
-1. Explain the purpose of each class, header and source file.
-2. Compile with `-std=c++98 -Wall -Wextra -Werror`.
-3. Try invalid inputs and boundary cases, not just the happy path.
-4. Check that copies, exceptions, containers, and resource lifetimes behave as expected.
-5. Consult the 42 subject provided for your module for evaluation requirements.
+**Important:** Shortest span and longest span report differences between stored values, not the number of elements between positions. The Span class throws an exception when the collection is too small.
 
-### Useful Links
+These checks are suggestions; the documentation update does not imply they were run.
+
+## Further Reading
 
 - [C++ reference](https://en.cppreference.com/w/cpp)
-- [C++ algorithms](https://en.cppreference.com/w/cpp/algorithm)
-- [C++ iterators](https://en.cppreference.com/w/cpp/iterator)
-- [std::stack](https://en.cppreference.com/w/cpp/container/stack)
-- [GNU Make manual](https://www.gnu.org/software/make/manual/)
+- [C++ language guide](https://en.cppreference.com/w/cpp/language)
+- [GNU Make](https://www.gnu.org/software/make/manual/)
 
 ### AI Usage
 
-AI assistance was used to **organize this README, clarify the C++ concepts, and create educational diagrams**. No C++ implementation files were changed by this documentation update.
+AI assistance was used to organize the documentation, clarify concepts and prepare examples. **No source code was changed.**
