@@ -1,275 +1,85 @@
 *This project has been created as part of the 42 curriculum by hsennane.*
 
-# CPP Module 00
+# CPP00 — Introduction to C++ and Classes
 
 ## Description
 
-**CPP Module 00** focuses on **Namespaces, classes, member functions, std::iostream and basic encapsulation**.
+CPP00 introduces C++98 syntax, standard input/output, and object-oriented design through a megaphone and an interactive phone book.
 
-This first C++ module introduces object-oriented programming through text processing and a small interactive contact manager. The repository contains two exercises.
+Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
 
 ## Instructions
 
-### Building and Running
+### Build and run
 
-Requires a C++ compiler and GNU Make. Exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`.
+These exercises use **C++98**, with `-Wall -Wextra -Werror -std=c++98` in their Makefiles. They are independent executables compiled in their respective folders.
 
 ```bash
 git clone https://github.com/hajarsen/CPP00.git
-cd CPP00/ex00
-make
-./megaphone "hello, c++!"
-```
-
-Run `make clean`, `make fclean` or `make re` inside an exercise directory. Exercises are separate programs, so compile them individually rather than expecting one executable at the repository root.
-
-### Exercises
-
-| Directory | Objective |
-|---|---|
-| `ex00` | **Megaphone:** Read command-line arguments and display their uppercase form. |
-| `ex01` | **PhoneBook:** Create Contact and PhoneBook classes, store entries, and interact through a command-line menu. |
-
-### Suggested Tests
-
-Try no arguments, several words, and punctuation with Megaphone. In PhoneBook, add several contacts, search for an existing or missing index, and test the behavior when its capacity is reached.
-
-These are suggested manual checks, **not verified automated test results**.
-
-## Resources — Learn the Ideas Step by Step
-
-This section is meant to help you **understand, explain, and test** the exercises instead of simply running them. Read the concepts, trace the diagrams, run the examples, and answer the questions at the end.
-
----
-
-## 🖥️ 1. From C to C++
-
-C++ retains many C concepts, but introduces useful abstractions such as **classes**, **encapsulation**, and the `std::string` and stream libraries.
-
-| C-style idea | C++98 idea | Why it matters |
-|---|---|---|
-| `printf` | `std::cout` | Stream-based output |
-| `scanf` / manual input | `std::getline(std::cin, line)` | Read a complete line, including spaces |
-| `char*` buffers | `std::string` | Text with managed storage and useful methods |
-| Struct + helper functions | Class with methods | Keep related behavior and data together |
-
-### Example: output streams
-
-```cpp
-#include <iostream>
-#include <string>
-
-int main()
-{
-    std::string name = "Alice";
-    std::cout << "Hello " << name << std::endl;
-}
-```
-
-`std::endl` writes a newline and **flushes** the stream; `'\n'` writes a newline without necessarily flushing. Understanding the difference can help when working with interactive prompts.
-
----
-
-## 🔊 2. Exercise 00: Megaphone
-
-The first exercise uses **`argc`**, **`argv`**, character conversion, and nested loops. There is no class yet: the goal is to become comfortable with C++ streams.
-
-### How command-line arguments are represented
-
-```text
-./megaphone "hello world" 42
-      │         │        │
- argv[0]     argv[1]   argv[2]
-
-argc = 3 (program name included)
-```
-
-The source walks through every character in each supplied argument and calls `std::toupper` after converting the byte to `unsigned char`. That conversion avoids undefined behavior with negative signed `char` values (except EOF semantics).
-
-```text
-            each argument
-                  │
-                  ▼
-          read each character
-                  │
-                  ▼
-              toupper()
-                  │
-                  ▼
-            std::cout
-```
-
-### Try these commands
-
-```bash
+cd CPP00
 cd ex00
 make
-./megaphone "hello c++"
-./megaphone hello world
-./megaphone
-```
-
-The source concatenates argument text **without inserting spaces** between separate arguments: `hello world` is printed as `HELLOWORLD`. If you want a visible space, include it inside a quoted argument.
-
-When called without arguments, the program prints the prescribed loud feedback message.
-
----
-
-## 📇 3. Exercise 01: Designing a PhoneBook
-
-The second exercise introduces two classes:
-
-- `Contact` holds the data for one person.
-- `PhoneBook` manages an array of contacts and user interactions.
-
-### Encapsulation
-
-`private` means code outside a class cannot directly access its internal members. `public` methods provide controlled operations.
-
-```text
-              PhoneBook
- ┌─────────────────────────────────┐
- │ private:                        │
- │  Contact contacts[8]            │
- │  nbrOfContacts                  │
- │  lastContactIndex               │
- │                                 │
- │ public:                         │
- │  addContact()                   │
- │  searchContacts()               │
- └─────────────────────────────────┘
-          │            │
-          ▼            ▼
-       Contact      Terminal
-       objects      I/O
-```
-
-Why not store everything in global variables? Because the class keeps **state** and its operations together, making data access clearer and easier to test.
-
-### 4. Fixed-size storage and circular replacement
-
-The source uses a **fixed array of eight contacts**. There is no dynamic array allocation for these contact records.
-
-When the book fills up, adding another contact overwrites the oldest slot according to a rotating index:
-
-```cpp
-lastContactIndex = (lastContactIndex + 1) % maxContacts;
-```
-
-Follow the index for ten successful insertions:
-
-| Inserted contact | Slot used | Next insertion slot |
-|---|---:|---:|
-| 1 | 0 | 1 |
-| 2 | 1 | 2 |
-| 7 | 6 | 7 |
-| 8 | 7 | 0 |
-| 9 | 0 (overwrites first) | 1 |
-| 10 | 1 (overwrites second) | 2 |
-
-```text
-   ┌────┬────┬────┬────┬────┬────┬────┬────┐
-   │ 0  │ 1  │ 2  │ 3  │ 4  │ 5  │ 6  │ 7  │
-   └────┴────┴────┴────┴────┴────┴────┴────┘
-     ▲                                   │
-     └──────────── wrap with % 8 ────────┘
-```
-
-**Important detail:** This is a circular *slot replacement* policy; the display uses slot indices and is not necessarily sorted by chronological insertion order after wrapping.
-
-### 5. Building an interactive terminal loop
-
-`main.cpp` reads commands with `std::getline`:
-
-```text
-             Read one line
-                   │
-                   ▼
-           ┌───────────────┐
-           │ ADD / SEARCH? │
-           └───────┬───────┘
-             /     │      \
-           ADD   SEARCH   EXIT
-            │      │       │
-       Ask fields  List    Stop
-            │    contacts  loop
-            └──────┬───────┘
-                   ▼
-             Read next line
-```
-
-`ADD` asks for first name, last name, nickname, phone number, and darkest secret. The program rejects blank and non-printable entries; the **phone number must consist of digits**. End-of-file during input is handled.
-
-`SEARCH` displays a table and asks for a valid index. For readability, values longer than ten characters are shortened to **nine characters followed by a dot**.
-
-### 6. Formatting with iomanip
-
-`std::setw(10)` defines a **minimum field width** for the next formatted output operation. A field such as `Alexanderson` is therefore truncated manually first to fit the ten-character display.
-
-```text
-Original:  "Alexanderson"
-Truncated: "Alexander."
-Column:     [Alexander.]
-              10 chars
-```
-
-The actual full data remains stored in the Contact and can be viewed when selecting its index.
-
----
-
-## 🧪 7. Suggested Tests
-
-From the `ex01` directory:
-
-```bash
+./megaphone 'hello world'
+cd ../ex01
 make
 ./PhoneBook
 ```
 
-| Test | Steps | What to check |
+Inside each exercise, use `make` to compile, `make clean` to remove objects, `make fclean` to remove the executable, or `make re` to rebuild. Check each Makefile for its executable name.
+
+### Exercises
+
+| Folder | Topic | Purpose |
 |---|---|---|
-| Empty book | Start, type `SEARCH` | "No contacts" |
-| One contact | `ADD`, enter five fields, then `SEARCH` | Contact visible |
-| Bad phone | Enter letters as phone number | Rejected and asked again |
-| Invalid index | `SEARCH`, choose out-of-range number | Rejected |
-| Long name | Add name longer than 10 characters | Table truncates |
-| Capacity | Add nine contacts | Slot 0 is replaced |
-| Exit | Type `EXIT` | Loop ends |
+| `ex00` | **Megaphone** | Convert command-line text to uppercase. |
+| `ex01` | **PhoneBook** | Store and search up to eight contacts using two classes. |
 
-**These tests are examples to try; they were not executed for this README update.**
+## Resources — Understand the Concepts
 
-### Debugging questions
+### 1. Streams and arguments
 
-1. Why does `argv[0]` not represent the first user argument?
-2. What happens if `std::getline` reaches EOF?
-3. Why use `% maxContacts` after inserting a contact?
-4. What is the difference between hiding a field with `private` and validating it in a public method?
+`std::cout` prints to the terminal and `std::getline(std::cin, text)` reads an entire line. `argc` counts arguments including the executable; `argv[1]` is the first user argument. In `megaphone.cpp`, nested loops visit each argument and character, then convert the character with `std::toupper`.
 
-<details>
-<summary><strong>Answers</strong></summary>
+### 2. Classes and encapsulation
 
-1. `argv[0]` is the command name/path; the first additional argument is `argv[1]`.
-2. Input fails, so the program can stop rather than loop indefinitely.
-3. The modulo wraps the next insertion index from 7 back to 0.
-4. Access control limits who can manipulate fields; validation checks whether a proposed value is acceptable.
+`Contact` stores one person's fields. `PhoneBook` stores eight `Contact` objects plus counters. `private` keeps internal data hidden, while public `addContact()` and `searchContacts()` provide controlled interaction. A constructor initializes an object; its destructor runs at the end of its lifetime.
 
-</details>
+### 3. Circular storage and formatted output
 
-## 🎯 What to Be Able to Explain in an Evaluation
+After successfully adding a contact, the source calculates `(lastContactIndex + 1) % 8`. This wraps the next insertion position back to zero, overwriting an older contact once all eight slots are used. `std::setw(10)` formats a table column; long fields are shortened to nine characters plus a dot.
 
-- The roles of `argc` and `argv` and why loops have two levels in Megaphone.
-- The difference between a **class definition** and an **object instance**.
-- Constructors, destructors, member functions, `const` methods, and access modifiers.
-- The PhoneBook insertion index and its wraparound behavior.
-- Why input is read with `std::getline` instead of mixing token and line input.
+### How it works
 
-### Further Reading
+```text
+PhoneBook
+┌──────────────────────────────────────┐
+│ Contact slots: [0][1][2][3][4][5][6][7] │
+│                 ↑                    │
+│       next = (next + 1) % 8         │
+└──────────────────────────────────────┘
+```
 
-- [Classes — cppreference](https://en.cppreference.com/w/cpp/language/classes)
-- [std::string](https://en.cppreference.com/w/cpp/string/basic_string)
-- [std::getline](https://en.cppreference.com/w/cpp/string/basic_string/getline)
-- [Formatted input/output](https://en.cppreference.com/w/cpp/io)
+## Practice and Testing
+
+Run `./megaphone hello world` (notice how separate arguments are concatenated) and `./megaphone 'hello world'` (the space is preserved). In PhoneBook try `SEARCH` before `ADD`, create nine contacts, enter a non-numeric phone number, and select an invalid index.
+
+**What to watch for:** PhoneBook data exists only during the current run; it is not saved to disk. The source validates fields as printable text and requires digits for phone numbers.
+
+The suggestions above are for your own testing; no automated results are claimed here.
+
+### Questions to consider
+
+- What does this exercise add compared with the previous one?
+- Which parts of the code manage data, and which perform operations?
+- How do errors and boundary cases affect the results?
+- Could you explain the diagram and the output in a 42 evaluation?
+
+## Useful Resources
+
+- [C++ language reference](https://en.cppreference.com/w/cpp)
+- [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
+- [GNU Make manual](https://www.gnu.org/software/make/manual/)
 
 ### AI Usage
 
-AI assistance was used to **explain the code, prepare diagrams, and propose exercises and test cases**. No C++ source code was changed, and the test results were not independently verified.
+AI assistance was used to organize the documentation, clarify concepts and prepare examples. **Source code was not changed** by this README update.
