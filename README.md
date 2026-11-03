@@ -15,8 +15,8 @@ This module builds a family of simple game-like classes to illustrate single inh
 Requires a C++ compiler and GNU Make. Exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`.
 
 ```bash
-git clone https://github.com/hajarsen/cpp_modules03.git
-cd cpp_modules03/ex00
+git clone https://github.com/hajarsen/CPP03.git
+cd CPP03/ex00
 make
 ./ClapTrap
 ```
