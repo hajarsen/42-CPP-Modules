@@ -1,18 +1,18 @@
 *This project has been created as part of the 42 curriculum by hsennane.*
 
-# CPP Module 06 — C++ Casts
+# CPP06 — C++ Casting and Type Identification
 
 ## Description
 
-This module practices different forms of C++ type conversion: **scalar conversions**, pointer serialization, and **runtime identification** of derived objects.
+CPP06 explores explicit conversions between C++ types: numeric literals, pointer/integer round trips, and runtime identification of polymorphic objects.
 
-The exercises are independent programs and are stored in `ex00`, `ex01`, and `ex02`.
+This README explains **what each exercise demonstrates**, the key ideas behind the code, and ways to explore them yourself.
 
 ## Instructions
 
-### Building the Project
+### Build and run
 
-The exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`. You need a C++ compiler and `make`.
+The exercises use **C++98** (`-Wall -Wextra -Werror -std=c++98`). Each folder builds a separate executable.
 
 ```bash
 git clone https://github.com/hajarsen/CPP06.git
@@ -20,75 +20,60 @@ cd CPP06
 cd ex00
 make
 ./convert 42
-./convert 42.0f
+./convert 42.5f
+cd ../ex01
+make
+./serializer
 ```
 
-To try another exercise, change into its directory, run `make`, and check its Makefile for the executable name. The common targets are `make`, `make clean`, `make fclean`, and `make re`.
+If an exercise's executable name differs, check that exercise's Makefile. Use `make` to build, `make clean` to remove object files, `make fclean` to remove the executable, or `make re` to rebuild.
 
 ### Exercises
 
-| Exercise | Project | Purpose |
+| Folder | Topic | What it does |
 |---|---|---|
-| `ex00` | **ScalarConverter** | Convert input literals to character, integer, float, and double representations. |
-| `ex01` | **Serializer** | Convert a data pointer into an integer representation and back. |
-| `ex02` | **Runtime type identification** | Identify derived class instances using pointer and reference casts. |
+| `ex00` | **ScalarConverter** | Convert input text into char, int, float and double outputs. |
+| `ex01` | **Serializer** | Convert a `Data*` to `uintptr_t` and back. |
+| `ex02` | **Identify** | Recognize A, B or C objects through a Base pointer/reference. |
 
-### Suggested Tests
+## Resources — Key Concepts
 
-For ScalarConverter, try `a`, `42`, `-42`, `42.0f`, `nan`, `inf`, and invalid strings. For Serializer, verify a round-trip preserves the original pointer. For type identification, test generated A/B/C instances.
+### 1. Scalar conversions are not always possible
 
-These are **suggested manual tests**; they have not been executed as part of this documentation update.
+`ScalarConverter` detects whether a literal is a character, integer, float or double, then prints its representations in all four forms. A value may be out of range for `char` or `int`, and special values like `nan` or `+inf` are not normal integers. The implementation checks printability and limits.
 
-## Resources
+### 2. reinterpret_cast and pointer serialization
 
-The following sections explain the core concepts with simplified examples and diagrams, following the style of the NetPractice README.
+`Serializer::serialize()` converts a pointer to `uintptr_t`; `deserialize()` converts the integer representation back. This is an **address round trip**, not saving object contents to a file. The example compares the restored pointer with the original; the object must still be alive.
 
----
+### 3. Runtime identification with dynamic_cast
 
-### 🔄 Scalar Conversion
+`generate()` creates an A, B or C through a Base pointer. A `dynamic_cast` on a pointer returns null if the cast fails; a failing reference cast throws `std::bad_cast`. The exercise demonstrates both ways of identifying the dynamic type.
 
-Different C++ scalar types have different valid ranges and representations. A conversion may succeed, lose precision, or be impossible.
-
-### 📍 Pointer Serialization
-
-A pointer can be converted to an integer type capable of holding it, then converted back. This demonstrates the relationship between object addresses and integer representations.
-
-### 🔍 Runtime Type Identification
-
-Polymorphic base-class pointers and references can be dynamically checked against derived types using `dynamic_cast`.
-
-
-### Concept Diagram
+### Visual summary
 
 ```text
-         Input literal
-              │
-              ▼
-      ScalarConverter
-       /    |    |    \
-      ▼     ▼    ▼     ▼
-     char  int float double
+Text '42.5f' ─► scalar conversion ─► char/int/float/double
 
-Data* ─► uintptr_t ─► Data*
+Data* ─► uintptr_t ─► Data* (same address)
+
+Base* ─► dynamic_cast ─► A? B? C?
 ```
 
----
+## Tests to Try
 
-## 🎯 Learning and Evaluation Tips
+Run `./convert a`, `./convert 42`, `./convert 42.5f`, `./convert nan`, `./convert +inf`, and an invalid string. For the other exercises check pointer equality and which derived class gets identified.
 
-1. Explain the purpose of each class, header and source file.
-2. Compile with `-std=c++98 -Wall -Wextra -Werror`.
-3. Try invalid inputs and boundary cases, not just the happy path.
-4. Check that copies, exceptions, containers, and resource lifetimes behave as expected.
-5. Consult the 42 subject provided for your module for evaluation requirements.
+**Important:** A cast cannot make an expired pointer valid. Conversions of large floating-point values can lose precision, so check outputs rather than assuming exact values.
 
-### Useful Links
+These checks are suggestions; the documentation update does not imply they were run.
+
+## Further Reading
 
 - [C++ reference](https://en.cppreference.com/w/cpp)
-- [C++ casts](https://en.cppreference.com/w/cpp/language/explicit_cast)
-- [dynamic_cast](https://en.cppreference.com/w/cpp/language/dynamic_cast)
-- [GNU Make manual](https://www.gnu.org/software/make/manual/)
+- [C++ language guide](https://en.cppreference.com/w/cpp/language)
+- [GNU Make](https://www.gnu.org/software/make/manual/)
 
 ### AI Usage
 
-AI assistance was used to **organize this README, clarify the C++ concepts, and create educational diagrams**. No C++ implementation files were changed by this documentation update.
+AI assistance was used to organize the documentation, clarify concepts and prepare examples. **No source code was changed.**
