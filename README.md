@@ -15,8 +15,8 @@ This first C++ module introduces object-oriented programming through text proces
 Requires a C++ compiler and GNU Make. Exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`.
 
 ```bash
-git clone https://github.com/hajarsen/cpp00.git
-cd cpp00/ex00
+git clone https://github.com/hajarsen/CPP00.git
+cd CPP00/ex00
 make
 ./megaphone "hello, c++!"
 ```
