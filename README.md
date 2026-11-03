@@ -1,98 +1,90 @@
 *This project has been created as part of the 42 curriculum by hsennane.*
 
-# CPP Module 01
+# CPP01 — Memory, Pointers and References
 
 ## Description
 
-This module introduces **C++ object lifetime**, **dynamic allocation**, **pointers and references**, and **file streams**. Each exercise is a small independent program that explores one part of memory and object management.
+CPP01 explores object lifetime, dynamic arrays, references, file streams, and dispatching member functions. Its exercises build intuition about resource ownership and C++ object behavior.
+
+Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
 
 ## Instructions
 
 ### Build and run
 
-Use a C++98 compiler and `make`. For example:
+These exercises use **C++98**, with `-Wall -Wextra -Werror -std=c++98` in their Makefiles. They are independent executables compiled in their respective folders.
 
 ```bash
 git clone https://github.com/hajarsen/CPP01.git
-cd CPP01/ex00
+cd CPP01
+cd ex00
 make
 ./Zombie
-```
-
-Compile the other exercises inside their respective directories. Standard Makefile targets include `make`, `make clean`, `make fclean`, and `make re`.
-
-### Exercises
-
-| Directory | Topic | Objective |
-|---|---|---|
-| `ex00` | Zombie | Create objects on the stack and heap |
-| `ex01` | Zombie Horde | Create and manage an array of objects |
-| `ex02` | Brain | Understand references, pointers, and addresses |
-| `ex03` | Weapon | Compare composition using references and pointers |
-| `ex04` | File replacement | Read a text file and write a `.replace` file |
-| `ex05` | Harl | Call class member functions to emit different messages |
-
-### Example — File replacement
-
-From `ex04`, once built:
-
-```bash
+cd ../ex04
+make
 printf 'hello world\n' > sample.txt
-./replace sample.txt hello hi
+./readFile sample.txt hello hi
 cat sample.txt.replace
 ```
 
-Check the actual executable name in `ex04/Makefile` if it differs.
+Inside each exercise, use `make` to compile, `make clean` to remove objects, `make fclean` to remove the executable, or `make re` to rebuild. Check each Makefile for its executable name.
 
-### Suggested tests
+### Exercises
 
-Test successful file replacements and missing files, empty search strings, the creation/destruction order of zombie objects, and behavior of references when an existing Weapon changes. These are **manual test suggestions**, not claims of passing tests.
+| Folder | Topic | Purpose |
+|---|---|---|
+| `ex00` | **Zombie** | Compare a local zombie with one created using `new`. |
+| `ex01` | **Zombie Horde** | Allocate and clean up an array of objects. |
+| `ex02` | **Brain** | Compare a string, its pointer, and its reference. |
+| `ex03` | **Weapon** | Understand object relationships using `HumanA` and `HumanB`. |
+| `ex04` | **File replacement** | Replace text in a file without modifying the input. |
+| `ex05` | **Harl** | Select a class method from a message level. |
 
-## Resources
+## Resources — Understand the Concepts
 
----
+### 1. Automatic vs dynamic lifetime
 
-## 🧠 Stack vs Heap
+Local objects are destroyed automatically when their scope ends; `new` returns a pointer to a dynamically allocated object that must be paired with `delete`. For arrays, use matching `new[]` and `delete[]`. `ex00` demonstrates heap and stack zombies; `ex01` creates a horde.
+
+### 2. Pointers vs references
+
+A pointer stores an address and can be reassigned or null; a reference names an existing object and must be initialized. `HumanA` stores a `Weapon&`, while `HumanB` stores a `Weapon*` initialized to null. This lets `HumanB` exist without a weapon until `setWeapon()` is called.
+
+### 3. Files and member-function pointers
+
+`ex04/main.cpp` uses `std::ifstream` and `std::ofstream` to create an output file with `.replace` appended. `ex05` stores pointers to `Harl` member functions and dispatches one through `(this->*pointer)()` based on the requested level.
+
+### How it works
 
 ```text
-   Automatic allocation          Dynamic allocation
-   ┌─────────────────┐            ┌──────────────────────┐
-   │ Zombie local;   │            │ Zombie* p = new ... │
-   │ lifetime: scope │            │ lifetime: until     │
-   │                 │            │ delete p;           │
-   └─────────────────┘            └──────────────────────┘
+Local Zombie ───► destroyed on scope exit
+new Zombie   ───► pointer ───► delete
+
+HumanA ── Weapon& ──► existing Weapon
+HumanB ── Weapon* ──► NULL or existing Weapon
 ```
 
-### Pointer vs Reference
+## Practice and Testing
 
-A **pointer** stores an address and can be reassigned. A **reference** is another name for an already existing object.
+Check zombie constructor/destructor output, pointer/reference addresses in ex02, and `HumanB` before and after `setWeapon()`. In ex04, test missing files, replacing repeated words, and an empty search string.
 
-```text
-          Weapon object
-           ▲        ▲
-           │        │
-    Weapon* ptr    Weapon& ref
-```
+**What to watch for:** The ex04 executable is named `readFile` in its Makefile. An empty search string is rejected. Memory ownership is especially important when using `new` and `new[]`.
 
-### Object Lifetime
+The suggestions above are for your own testing; no automated results are claimed here.
 
-C++ constructors initialize objects and destructors release resources during destruction. A zombie horde demonstrates initializing arrays of objects and cleaning them up correctly.
+### Questions to consider
 
----
+- What does this exercise add compared with the previous one?
+- Which parts of the code manage data, and which perform operations?
+- How do errors and boundary cases affect the results?
+- Could you explain the diagram and the output in a 42 evaluation?
 
-## 🎯 Learning Checklist
+## Useful Resources
 
-- Explain the difference between `new`, `delete`, and local objects.
-- Identify which object owns allocated resources.
-- Demonstrate the difference between pointers and references.
-- Test file reading and writing without changing the input file unexpectedly.
-
-### Useful Links
-
-- [C++ new expression](https://en.cppreference.com/w/cpp/language/new)
-- [C++ references](https://en.cppreference.com/w/cpp/language/reference)
-- [C++ file streams](https://en.cppreference.com/w/cpp/io/basic_fstream)
+- [C++ language reference](https://en.cppreference.com/w/cpp)
+- [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
+- [GNU Make manual](https://www.gnu.org/software/make/manual/)
 
 ### AI Usage
 
-AI assistance was used to structure the README and explain concepts. Application source files were not modified.
+AI assistance was used to organize the documentation, clarify concepts and prepare examples. **Source code was not changed** by this README update.
