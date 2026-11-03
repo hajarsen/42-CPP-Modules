@@ -1,89 +1,87 @@
 *This project has been created as part of the 42 curriculum by hsennane.*
 
-# CPP Module 04
+# CPP04 — Polymorphism and Abstract Classes
 
 ## Description
 
-**CPP Module 04** focuses on **Runtime polymorphism, abstract classes, virtual destructors and deep copying**.
+CPP04 demonstrates dynamic dispatch through virtual functions, resource ownership through deep copying, and interfaces defined by abstract base classes.
 
-This module demonstrates how base-class pointers interact with derived classes, why virtual methods matter, and how to manage copied owned data safely.
+Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
 
 ## Instructions
 
-### Building and Running
+### Build and run
 
-Requires a C++ compiler and GNU Make. Exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`.
+These exercises use **C++98**, with `-Wall -Wextra -Werror -std=c++98` in their Makefiles. They are independent executables compiled in their respective folders.
 
 ```bash
 git clone https://github.com/hajarsen/CPP04.git
-cd CPP04/ex00
+cd CPP04
+cd ex00
 make
 ./ex00
+cd ../ex01
+make
+./ex01
 ```
 
-Run `make clean`, `make fclean` or `make re` inside an exercise directory. Exercises are separate programs, so compile them individually rather than expecting one executable at the repository root.
+Inside each exercise, use `make` to compile, `make clean` to remove objects, `make fclean` to remove the executable, or `make re` to rebuild. Check each Makefile for its executable name.
 
 ### Exercises
 
-| Directory | Objective |
-|---|---|
-| `ex00` | **Animals:** Compare virtual Animal behavior with intentionally non-virtual WrongAnimal/WrongCat behavior. |
-| `ex01` | **Brain:** Use Brain objects and test deep-copy behavior for Dog and Cat. |
-| `ex02` | **Abstract Animal:** Use an abstract animal base type and concrete derived types. |
+| Folder | Topic | Purpose |
+|---|---|---|
+| `ex00` | **Animals** | Compare virtual calls with intentionally nonvirtual WrongAnimal/WrongCat behavior. |
+| `ex01` | **Brains** | Give animals an owned `Brain` and verify independent copies. |
+| `ex02` | **Abstract Animal** | Use an abstract `AAnimal` base with concrete derived types. |
 
-### Suggested Tests
+## Resources — Understand the Concepts
 
-Compare sounds through base pointers, check correct destruction through a base-class pointer, and verify that changing one copied Brain does not change another.
+### 1. Virtual methods and dispatch
 
-These are suggested manual checks, **not verified automated test results**.
+Calling a virtual method through an `Animal*` or `Animal&` selects the method of the actual derived object. The WrongAnimal example intentionally illustrates what can happen without virtual dispatch.
 
-## Resources
+### 2. Deep copies and ownership
 
-Below are the key ideas with simplified diagrams, following the educational structure of the NetPractice README.
+The `Brain` class stores 100 ideas. Its copy constructor and assignment copy all ideas. When an animal owns a heap-allocated Brain, creating an independent copy matters: two animals should not accidentally point to the same mutable Brain or both delete it.
 
----
+### 3. Abstract classes and destructors
 
-### Virtual Functions
+`AAnimal` declares `virtual void makeSound() const = 0;`, making it abstract. You cannot construct `AAnimal` itself, but `Dog` and `Cat` can implement the interface. A virtual base destructor allows safe destruction through base pointers.
 
-A virtual method dispatches according to the dynamic object type, rather than only the pointer's static type.
-
-### Deep vs Shallow Copy
-
-When objects own heap resources, copying only a pointer can cause accidental sharing and double deletion. A deep copy creates independent owned state.
-
-### Abstract Base Classes
-
-A pure virtual function makes a class abstract: it defines an interface but cannot be directly instantiated.
-
-
-### Concept Diagram
+### How it works
 
 ```text
-       Animal* pointer
-              │
-         virtual call
-              │
-       ┌──────┴──────┐
-       ▼             ▼
-      Dog           Cat
-   makeSound()   makeSound()
+Animal* base_ptr
+       │ virtual makeSound()
+       ├────────► Dog::makeSound()
+       └────────► Cat::makeSound()
+
+Dog A → [Brain A] (independent)
+Dog B → [Brain B] (deep copy)
 ```
 
----
+## Practice and Testing
 
-## 🎯 Learning Checklist
+Compare output from Animal and WrongAnimal through base pointers. Copy a Dog or Cat, modify one Brain and verify the other is unchanged. Explain why `new AAnimal` would fail to compile.
 
-- Explain the purpose of every source file and the classes/functions defined in it.
-- Compile with the project's C++98 warning flags.
-- Test normal input, empty or invalid input, and boundary cases.
-- Check resource cleanup, copying, and object lifetime where applicable.
+**What to watch for:** `Brain` is an educational example of owned state, not a general-purpose data structure. Tests should distinguish copying an object from copying a pointer.
 
-### Useful Links
+The suggestions above are for your own testing; no automated results are claimed here.
+
+### Questions to consider
+
+- What does this exercise add compared with the previous one?
+- Which parts of the code manage data, and which perform operations?
+- How do errors and boundary cases affect the results?
+- Could you explain the diagram and the output in a 42 evaluation?
+
+## Useful Resources
 
 - [C++ language reference](https://en.cppreference.com/w/cpp)
-- [C++ classes and objects](https://en.cppreference.com/w/cpp/language/classes)
+- [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
 - [GNU Make manual](https://www.gnu.org/software/make/manual/)
 
 ### AI Usage
 
-AI assistance was used to **organize this README, explain C++ concepts, and prepare educational diagrams**. The original C++ source code was not changed as part of this documentation update.
+AI assistance was used to organize the documentation, clarify concepts and prepare examples. **Source code was not changed** by this README update.
