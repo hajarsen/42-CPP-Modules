@@ -15,8 +15,8 @@ This module demonstrates how base-class pointers interact with derived classes, 
 Requires a C++ compiler and GNU Make. Exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`.
 
 ```bash
-git clone https://github.com/hajarsen/cpp_module04.git
-cd cpp_module04/ex00
+git clone https://github.com/hajarsen/CPP04.git
+cd CPP04/ex00
 make
 ./ex00
 ```
