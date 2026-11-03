@@ -1,18 +1,18 @@
 *This project has been created as part of the 42 curriculum by hsennane.*
 
-# CPP Module 05 — Repetition and Exceptions
+# CPP05 — Exceptions, Bureaucracy and Forms
 
 ## Description
 
-This module models a small bureaucracy with constrained grades, forms, and actions. Its exercises focus on class invariants, **exceptions**, inheritance, abstract classes, and object creation through an Intern.
+CPP05 introduces robust class invariants, exceptions, and abstract classes through a bureaucracy simulation. Bureaucrats have grades and may sign or execute forms only when they satisfy each form's requirements.
 
-The exercises are independent programs and are stored in `ex00`, `ex01`, `ex02`, and `ex03`.
+This README explains **what each exercise demonstrates**, the key ideas behind the code, and ways to explore them yourself.
 
 ## Instructions
 
-### Building the Project
+### Build and run
 
-The exercise Makefiles use **C++98** with `-Wall -Wextra -Werror`. You need a C++ compiler and `make`.
+The exercises use **C++98** (`-Wall -Wextra -Werror -std=c++98`). Each folder builds a separate executable.
 
 ```bash
 git clone https://github.com/hajarsen/CPP05.git
@@ -20,77 +20,67 @@ cd CPP05
 cd ex00
 make
 ./bureaucrat
+cd ../ex03
+make
+./intern
 ```
 
-To try another exercise, change into its directory, run `make`, and check its Makefile for the executable name. The common targets are `make`, `make clean`, `make fclean`, and `make re`.
+If an exercise's executable name differs, check that exercise's Makefile. Use `make` to build, `make clean` to remove object files, `make fclean` to remove the executable, or `make re` to rebuild.
 
 ### Exercises
 
-| Exercise | Project | Purpose |
+| Folder | Topic | What it does |
 |---|---|---|
-| `ex00` | **Bureaucrat** | Construct a Bureaucrat and handle invalid grades. |
-| `ex01` | **Form** | Add forms with signing requirements and signed state. |
-| `ex02` | **AForm** | Use an abstract form type and concrete forms with execution behavior. |
-| `ex03` | **Intern** | Create forms from a requested name using an Intern. |
+| `ex00` | **Bureaucrat** | Construct objects with valid grades; reject invalid grades. |
+| `ex01` | **Form** | Introduce signing requirements and signed state. |
+| `ex02` | **AForm** | Introduce abstract forms and different executable actions. |
+| `ex03` | **Intern** | Choose a concrete form by name with a factory-like helper. |
 
-### Suggested Tests
+## Resources — Key Concepts
 
-Try grades just inside and outside the allowed range, signing with insufficient grade, executing an unsigned form, and requesting an unknown form from the Intern.
+### 1. Grades are invariants
 
-These are **suggested manual tests**; they have not been executed as part of this documentation update.
+A Bureaucrat's grade lies in the interval 1–150, where **1 is the highest rank**. Code that constructs a grade outside this range raises an exception. A form specifies separate grades to sign and execute it, so the caller must satisfy the relevant limit.
 
-## Resources
+### 2. Why exceptions?
 
-The following sections explain the core concepts with simplified examples and diagrams, following the style of the NetPractice README.
+Instead of silently creating an invalid object or allowing an illegal operation, a function can `throw` an exception. The caller can `catch` the error and report it. The source defines exceptions for grades and unsigned forms, providing meaningful error messages through `what()`.
 
----
+### 3. Abstract forms and polymorphism
 
-### ⚖️ Invariants and Exceptions
+`AForm` defines common checks and calls a derived `executeAction()` for the specific task. ShrubberyCreationForm, RobotomyRequestForm and PresidentialPardonForm represent distinct actions. The base form can be used through a pointer without needing to know which concrete form it is.
 
-A grade must stay in its permitted interval. Constructors and member functions can throw exceptions when an operation violates the class rules.
+### 4. Factory pattern with Intern
 
-### 🧬 Polymorphic Forms
+`Intern::makeForm(name, target)` matches a string against three supported names and calls the corresponding creation method using an array of member-function pointers. Unknown names raise `FormNotFoundException`. This isolates the choice of class from the caller.
 
-Derived forms represent distinct actions but share a common base interface. This allows a Bureaucrat to operate on different form types.
-
-### 🏭 Intern and Factory Logic
-
-An Intern selects a concrete form type from an input name, demonstrating object creation without hard-coding a concrete type in the caller.
-
-
-### Concept Diagram
+### Visual summary
 
 ```text
-          Bureaucrat
-         grade (1..150)
-               │
-               ▼
-       sign / execute
-               │
-               ▼
-             AForm
-       ┌───────┼──────────┐
-       ▼       ▼          ▼
-  Shrubbery Robotomy Presidential
+Bureaucrat (grade 1..150)
+             │ sign / execute
+             ▼
+        AForm (abstract)
+          /    |     \
+   Shrubbery Robotomy Presidential
+
+Intern -- name + target --> concrete form
 ```
 
----
+## Tests to Try
 
-## 🎯 Learning and Evaluation Tips
+Create a Bureaucrat with grades 1, 150, 0 and 151. Try signing a form with too-low authority, executing before signing, and asking the Intern for an unknown form. Compare the errors you receive.
 
-1. Explain the purpose of each class, header and source file.
-2. Compile with `-std=c++98 -Wall -Wextra -Werror`.
-3. Try invalid inputs and boundary cases, not just the happy path.
-4. Check that copies, exceptions, containers, and resource lifetimes behave as expected.
-5. Consult the 42 subject provided for your module for evaluation requirements.
+**Important:** `AForm::execute()` verifies both the signed state and the executor's grade before calling the concrete action. A successful sign does not automatically mean execution is authorized.
 
-### Useful Links
+These checks are suggestions; the documentation update does not imply they were run.
+
+## Further Reading
 
 - [C++ reference](https://en.cppreference.com/w/cpp)
-- [C++ exceptions](https://en.cppreference.com/w/cpp/language/throw)
-- [Virtual functions](https://en.cppreference.com/w/cpp/language/virtual)
-- [GNU Make manual](https://www.gnu.org/software/make/manual/)
+- [C++ language guide](https://en.cppreference.com/w/cpp/language)
+- [GNU Make](https://www.gnu.org/software/make/manual/)
 
 ### AI Usage
 
-AI assistance was used to **organize this README, clarify the C++ concepts, and create educational diagrams**. No C++ implementation files were changed by this documentation update.
+AI assistance was used to organize the documentation, clarify concepts and prepare examples. **No source code was changed.**
