@@ -8,25 +8,9 @@ CPP06 explores explicit conversions between C++ types: numeric literals, pointer
 
 This README explains **what each exercise demonstrates**, the key ideas behind the code, and ways to explore them yourself.
 
-## Instructions
+## Building
 
-### Build and run
-
-The exercises use **C++98** (`-Wall -Wextra -Werror -std=c++98`). Each folder builds a separate executable.
-
-```bash
-git clone https://github.com/hajarsen/CPP06.git
-cd CPP06
-cd ex00
-make
-./convert 42
-./convert 42.5f
-cd ../ex01
-make
-./serializer
-```
-
-If an exercise's executable name differs, check that exercise's Makefile. Use `make` to build, `make clean` to remove object files, `make fclean` to remove the executable, or `make re` to rebuild.
+Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercise folder, then launch its executable (see that folder's Makefile for its name). Use `make fclean` to clean generated files.
 
 ### Exercises
 
