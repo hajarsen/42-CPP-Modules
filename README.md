@@ -34,15 +34,16 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 `generate()` creates an A, B or C through a Base pointer. A `dynamic_cast` on a pointer returns null if the cast fails; a failing reference cast throws `std::bad_cast`. The exercise demonstrates both ways of identifying the dynamic type.
 
-### Implementation Diagram
+### Implementation Details
 
-```text
-Text '42.5f' ─► scalar conversion ─► char/int/float/double
-
-Data* ─► uintptr_t ─► Data* (same address)
-
-Base* ─► dynamic_cast ─► A? B? C?
-```
+| Exercise | Implementation |
+|---|---|
+| **ScalarConverter** | Classifies the input literal, performs conversions, and reports values that are not representable or displayable. |
+| **Numeric limits** | Uses type-range and special-value checks when converting to `char`, `int`, `float`, and `double`. |
+| **Serializer** | Uses `reinterpret_cast` to convert a `Data*` to `uintptr_t` and then restore the pointer. |
+| **Pointer identity** | The ex01 check compares the original and restored addresses; it does not serialize object contents. |
+| **Runtime identification** | Uses `dynamic_cast` to distinguish `A`, `B`, and `C` through a polymorphic `Base`. |
+| **Cast failure** | Failed pointer casts return null; failed reference casts throw an exception. |
 
 ## Validation Cases
 
