@@ -206,13 +206,9 @@ make
 
 The parser rejects empty input, zero, negative values and invalid integer arguments. Check that the `After:` output is sorted; the new README has not been used as an automated test of the program.
 
-### Implementation Details
+### Implementation Highlights
 
-| Program | Primary data structure | Key operation | Important consideration |
-|---|---|---|---|
-| **Bitcoin Exchange** | `std::map<std::string, double>` | `upper_bound()` and predecessor lookup | Database file must be supplied; invalid dates and values are rejected. |
-| **RPN** | `std::stack<int>` | Push operands; pop and apply each operator | Operand order matters for subtraction and division. |
-| **PmergeMe** | `std::vector<int>` and `std::deque<int>` | Recursive pair ordering, `std::find`, `lower_bound`, insertion | Middle insertion and linear searches affect runtime despite comparison-efficient ordering. |
+The two `PmergeMe` implementations follow the same insertion strategy for different containers. After sorting the larger pair values, the code re-associates them with their smaller partners using a linear scan and tracks used pairs to distinguish duplicate values. Along with middle insertions, this extra work affects runtime independently of the comparison-count benefits associated with Ford–Johnson sorting. The reported timings are single-run CPU measurements rather than comprehensive benchmarks.
 
 ---
 
@@ -232,6 +228,3 @@ The parser rejects empty input, zero, negative values and invalid integer argume
 - [Merge-insertion sort](https://en.wikipedia.org/wiki/Merge-insertion_sort)
 - [Jacobsthal sequence](https://oeis.org/A001045)
 
-### AI Usage
-
-AI assistance was used to explain the existing implementation, organize worked examples and suggest tests. The program source files were not modified, and no new runtime benchmark results are claimed.
