@@ -6,7 +6,7 @@
 
 **CPP Module 09** applies C++98 containers to three problems: finding historical exchange rates, evaluating postfix expressions, and sorting numbers using a **Ford–Johnson-inspired merge-insertion approach**.
 
-The aim of this README is to help visitors understand both **what the programs do** and **how their algorithms work**.
+This document covers the programs, their underlying algorithms, and implementation considerations.
 
 | Exercise | Program | Main concept |
 |---|---|---|
@@ -20,9 +20,9 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 ---
 
-## 📈 Exercise 00 — Bitcoin Exchange
+## Exercise 00 — Bitcoin Exchange
 
-### The problem
+### Objective
 
 Given an input date and Bitcoin amount, multiply the amount by the **exchange rate on that date**. If the date has no entry, use the most recent **earlier** rate.
 
@@ -40,7 +40,7 @@ date,exchange_rate      date | value
 
 For the input `2011-01-05 | 3`, the program uses the rate for **2011-01-03** (4), so the result is **3 × 4 = 12**.
 
-### Why std::map?
+### Ordered map lookup
 
 `std::map<std::string, double>` keeps date keys sorted. With dates written as `YYYY-MM-DD`, their string order agrees with chronological order for valid dates.
 
@@ -73,9 +73,9 @@ The code checks date formats and calendar validity, rejects negative values and 
 
 ---
 
-## 🧮 Exercise 01 — Reverse Polish Notation
+## Exercise 01 — Reverse Polish Notation
 
-### How postfix notation works
+### Postfix evaluation
 
 An ordinary mathematical expression is written with operators between numbers:
 
@@ -91,7 +91,7 @@ In **Reverse Polish Notation (RPN)**, the operators follow the numbers:
 
 The program uses `std::stack<int>`. Numbers are pushed; operators pop the top two numbers, calculate a result, then push it back.
 
-### Worked example
+### Evaluation example
 
 ```text
 Token       Stack (bottom → top)
@@ -106,7 +106,7 @@ Result: 14
 
 For subtraction and division, **operand order matters**. The first popped value is the right operand; the second popped value is the left operand.
 
-### Try it
+### Example commands
 
 ```bash
 cd ex01
@@ -120,9 +120,9 @@ The implementation accepts **single-digit operands (0–9)** and operators `+`, 
 
 ---
 
-## ⚙️ Exercise 02 — PmergeMe
+## Exercise 02 — PmergeMe
 
-### What is PmergeMe?
+### Sorting strategy
 
 `PmergeMe` sorts positive integers using two STL containers:
 
@@ -183,7 +183,7 @@ That boundary is useful because each smaller value is known to be ≤ its own pa
 
 Odd-length inputs have one unpaired value; the code inserts it into the chain later.
 
-### Why Jacobsthal numbers?
+### Jacobsthal insertion order
 
 The **Jacobsthal sequence** begins:
 
@@ -197,7 +197,7 @@ The source uses boundaries starting at **1 and 3**, then follows this recurrence
 
 This ordering is inspired by Ford–Johnson's approach to keeping binary-insertion search ranges efficient in **comparison count**.
 
-### Vector vs deque — what does this code measure?
+### Container comparison and timing
 
 `main.cpp` reads the same input into a vector and deque, sorts each separately, and prints CPU time from `clock()` in microseconds.
 
@@ -212,7 +212,7 @@ This ordering is inspired by Ford–Johnson's approach to keeping binary-inserti
 
 Timing on one run is not a reliable benchmark; larger inputs, repeated trials, and the same data are needed for a meaningful comparison.
 
-### Run ex02
+### Example commands for ex02
 
 ```bash
 cd ex02
@@ -227,14 +227,14 @@ The parser rejects empty input, zero, negative values and invalid integer argume
 
 ---
 
-## 🎯 Things to Remember
+## Summary
 
 1. **Bitcoin Exchange:** ordered maps support efficient lookup of the latest rate not after a date.
 2. **RPN:** a stack matches postfix evaluation because operators use the last two pending values.
 3. **PmergeMe:** pair sorting, recursion, bounded insertion and Jacobsthal-guided ordering form the core idea.
 4. **Performance:** comparison counts, asymptotic running time, and measured CPU time are different quantities.
 
-### Useful Links
+### References
 
 - [C++ containers](https://en.cppreference.com/w/cpp/container)
 - [std::map::upper_bound](https://en.cppreference.com/w/cpp/container/map/upper_bound)
