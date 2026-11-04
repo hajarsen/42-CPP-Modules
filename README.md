@@ -33,16 +33,15 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 After successfully adding a contact, the source calculates `(lastContactIndex + 1) % 8`. This wraps the next insertion position back to zero, overwriting an older contact once all eight slots are used. `std::setw(10)` formats a table column; long fields are shortened to nine characters plus a dot.
 
-### Implementation Diagram
+### Implementation Details
 
-```text
-PhoneBook
-┌──────────────────────────────────────┐
-│ Contact slots: [0][1][2][3][4][5][6][7] │
-│                 ↑                    │
-│       next = (next + 1) % 8         │
-└──────────────────────────────────────┘
-```
+| Component | Implementation |
+|---|---|
+| **Megaphone** | Iterates over command-line arguments with `argc`/`argv` and converts characters using `std::toupper`. |
+| **PhoneBook** | Stores a fixed array of eight `Contact` objects with a count and the next insertion index. |
+| **Contact insertion** | Advances the insertion index using `(lastContactIndex + 1) % 8`, replacing older entries once the array is full. |
+| **Input validation** | Reads complete lines with `std::getline`; rejects empty or non-printable fields and requires digits for phone numbers. |
+| **Search display** | Uses `std::setw(10)` for columns and truncates values longer than ten characters. |
 
 ## Validation Cases
 
