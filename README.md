@@ -19,16 +19,16 @@ A collection of my **42 C++ modules (CPP00–CPP09)**, organized in a single rep
 | [CPP08](CPP08/README.md) | STL | Iterators, containers, algorithms |
 | [CPP09](CPP09/README.md) | Applied algorithms | Bitcoin Exchange, RPN, merge-insertion sorting |
 
-## Organization
+## Repository Structure
 
-The modules are stored in folders named `CPP00` through `CPP09`. Each folder retains its original exercises (`ex00`, `ex01`, etc.) and a dedicated README. Exercises are **standalone programs**, not components of a single application.
+The repository brings together **CPP00–CPP09** in a single, organized collection. Each module retains its independent exercises, source files, and dedicated README, making it easy to explore individual implementations or follow the progression across the series.
 
-## Building
+## Build
 
-The projects target **C++98**. Each exercise includes its own `Makefile`; run `make` from the exercise's directory to compile it. `make clean`, `make fclean`, and `make re` are available in the module Makefiles. Executable names vary by exercise.
+All exercises target **C++98** and are compiled independently using their own Makefiles. Standard targets include `make`, `make clean`, `make fclean`, and `make re`. There is no repository-wide executable.
 
-## Technical Scope
+## Technical Highlights
 
-The collection progresses from classes and memory management to inheritance, polymorphism, exception handling, generic programming, and STL algorithms. The final module includes historical-rate lookups with `std::map`, postfix evaluation with `std::stack`, and pair-based merge-insertion sorting with `std::vector` and `std::deque`.
+The modules cover object-oriented design, memory and resource management, inheritance, polymorphism, exception handling, templates, and the Standard Template Library. The series concludes with practical applications of **ordered maps**, **stack-based expression evaluation**, and **merge-insertion sorting**, including a comparison of `std::vector` and `std::deque`.
 
-The module READMEs contain additional implementation notes and validation cases. The original modules are retained as separate GitHub repositories, and their commit histories are imported into this repository through Git subtrees without squashing.
+Detailed implementation notes and validation cases are available in each module's README.
