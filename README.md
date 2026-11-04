@@ -6,8 +6,6 @@
 
 CPP02 builds a `Fixed` number class step by step: canonical object construction, integer and float conversions, arithmetic operators, comparisons, and increments.
 
-Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
-
 ## Building
 
 Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercise folder, then launch its executable (see that folder's Makefile for its name). Use `make fclean` to clean generated files.
@@ -34,17 +32,9 @@ The default constructor initializes the raw number to zero. A copy constructor b
 
 Comparison operators compare stored raw integers. `+`, `-`, `*`, and `/` in the current ex02 implementation convert operands to floating point, calculate, then construct a `Fixed` result. Prefix `++a` returns the updated object; postfix `a++` returns a copy of the previous value. Each increment changes the raw value by 1—that is, 1/256 of a unit.
 
-### Implementation Details
+### Implementation Highlights
 
-| Feature | Implementation |
-|---|---|
-| **Internal storage** | A signed integer stores the raw value with 8 fractional bits. |
-| **Float conversion** | The constructor rounds `input × 256`; `toFloat()` divides the stored value by 256. |
-| **Copy semantics** | The copy constructor and assignment operator copy the raw value. |
-| **Comparison** | Relational operators compare the raw integer values directly. |
-| **Arithmetic** | The current implementation converts operands to floats, computes the result, and constructs a new `Fixed` value. |
-| **Increment/decrement** | Prefix returns `Fixed&` after changing the raw value; postfix returns a `Fixed` copy of the previous state. |
-
+Fixed-point precision is limited to steps of **1/256**. Each `++` or `--` changes the stored integer by one step, not by one whole unit. Arithmetic in `ex02` passes through floating-point conversion and reconstruction of a `Fixed` result, so rounding can accumulate across operations. The division operator does not explicitly guard against a zero divisor.
 
 ## Validation Cases
 
