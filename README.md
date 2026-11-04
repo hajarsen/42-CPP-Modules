@@ -39,18 +39,16 @@ Instead of silently creating an invalid object or allowing an illegal operation,
 
 `Intern::makeForm(name, target)` matches a string against three supported names and calls the corresponding creation method using an array of member-function pointers. Unknown names raise `FormNotFoundException`. This isolates the choice of class from the caller.
 
-### Implementation Diagram
+### Implementation Details
 
-```text
-Bureaucrat (grade 1..150)
-             │ sign / execute
-             ▼
-        AForm (abstract)
-          /    |     \
-   Shrubbery Robotomy Presidential
-
-Intern -- name + target --> concrete form
-```
+| Component | Implementation |
+|---|---|
+| **Grade validation** | `Bureaucrat` and form constructors enforce grade limits from 1 (highest) to 150 (lowest), throwing exceptions for invalid values. |
+| **Signing** | `AForm::beSigned()` verifies the signer's grade before setting the signed state. |
+| **Execution** | `AForm::execute()` checks both the signed state and the executor's grade before delegating to a derived action. |
+| **Concrete forms** | Shrubbery, Robotomy, and Presidential Pardon forms implement distinct actions through a common abstract interface. |
+| **Form creation** | `Intern::makeForm()` maps recognized names to member-function pointers that construct the corresponding form. |
+| **Error reporting** | Exception classes provide diagnostic messages through `what()`. |
 
 ## Validation Cases
 
