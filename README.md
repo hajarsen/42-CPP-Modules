@@ -38,16 +38,9 @@ The `iter` exercise accepts a pointer to an array, the number of elements, and a
 
 In the current code, `Array::operator=` deletes its existing storage before allocating the replacement. If allocation fails, that operation does not provide a strong exception-safety guarantee. This is a useful discussion point about safe resource management.
 
-### Implementation Details
+### Implementation Highlights
 
-| Exercise | Implementation |
-|---|---|
-| **Generic operations** | `swap`, `min`, and `max` are defined as function templates instantiated for compatible types. |
-| **Array traversal** | `iter` invokes a supplied function on each element within an array length. |
-| **Templated storage** | `Array<T>` owns dynamically allocated storage and tracks the number of elements. |
-| **Copy semantics** | The copy constructor allocates separate storage and copies each element. |
-| **Indexed access** | `operator[]` checks bounds and throws `OutOfBoundsException` when the index is invalid. |
-| **Resource cleanup** | The destructor releases the allocated array using `delete[]`. |
+**`Array<T>` owns its storage**, so copying it allocates a separate array rather than sharing a raw pointer. The current copy-assignment operator deletes its existing storage before allocating replacement storage; if allocation throws, the object is not left with a safely preserved previous value. This makes exception safety an important aspect of the implementation.
 
 ## Validation Cases
 
@@ -63,6 +56,3 @@ These checks are suggestions; the documentation update does not imply they were 
 - [C++ language guide](https://en.cppreference.com/w/cpp/language)
 - [GNU Make](https://www.gnu.org/software/make/manual/)
 
-### AI Usage
-
-AI assistance was used to organize the documentation, clarify concepts and prepare examples. **No source code was changed.**
