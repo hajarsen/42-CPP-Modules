@@ -6,8 +6,6 @@
 
 CPP01 explores object lifetime, dynamic arrays, references, file streams, and dispatching member functions. Its exercises build intuition about resource ownership and C++ object behavior.
 
-Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
-
 ## Building
 
 Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercise folder, then launch its executable (see that folder's Makefile for its name). Use `make fclean` to clean generated files.
@@ -37,16 +35,9 @@ A pointer stores an address and can be reassigned or null; a reference names an 
 
 `ex04/main.cpp` uses `std::ifstream` and `std::ofstream` to create an output file with `.replace` appended. `ex05` stores pointers to `Harl` member functions and dispatches one through `(this->*pointer)()` based on the requested level.
 
-### Implementation Details
+### Implementation Highlights
 
-| Exercise | Implementation |
-|---|---|
-| **Zombie allocation** | Compares automatic object lifetime with objects returned by `newZombie()` and later released with `delete`. |
-| **Zombie horde** | Allocates multiple objects in a dynamic array, requiring matching array deallocation. |
-| **Pointer and reference semantics** | Demonstrates direct values, stored addresses, and references to the same object. |
-| **HumanA / HumanB** | `HumanA` stores a `Weapon&`; `HumanB` stores a nullable `Weapon*` and can receive a weapon later. |
-| **File replacement** | Reads an input file and writes the modified contents to a separate `.replace` file. |
-| **Harl dispatch** | Uses an array of member-function pointers to invoke the method matching the requested level. |
+**Ownership is explicit:** the caller is responsible for deleting zombies created with `newZombie()`, while the `Weapon` used by `HumanA` or `HumanB` is a non-owning dependency. These relationships illustrate why an object holding a pointer is not necessarily responsible for destroying the pointed-to resource.
 
 ## Validation Cases
 
