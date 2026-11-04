@@ -6,7 +6,7 @@
 
 CPP06 explores explicit conversions between C++ types: numeric literals, pointer/integer round trips, and runtime identification of polymorphic objects.
 
-This README explains **what each exercise demonstrates**, the key ideas behind the code, and ways to explore them yourself.
+The sections below describe the exercise implementations and their underlying C++ concepts.
 
 ## Building
 
@@ -14,13 +14,13 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 ### Exercises
 
-| Folder | Topic | What it does |
+| Folder | Topic | Purpose |
 |---|---|---|
 | `ex00` | **ScalarConverter** | Convert input text into char, int, float and double outputs. |
 | `ex01` | **Serializer** | Convert a `Data*` to `uintptr_t` and back. |
 | `ex02` | **Identify** | Recognize A, B or C objects through a Base pointer/reference. |
 
-## Resources — Key Concepts
+## Technical Overview
 
 ### 1. Scalar conversions are not always possible
 
@@ -34,7 +34,7 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 `generate()` creates an A, B or C through a Base pointer. A `dynamic_cast` on a pointer returns null if the cast fails; a failing reference cast throws `std::bad_cast`. The exercise demonstrates both ways of identifying the dynamic type.
 
-### Visual summary
+### Implementation Diagram
 
 ```text
 Text '42.5f' ─► scalar conversion ─► char/int/float/double
@@ -44,7 +44,7 @@ Data* ─► uintptr_t ─► Data* (same address)
 Base* ─► dynamic_cast ─► A? B? C?
 ```
 
-## Tests to Try
+## Validation Cases
 
 Run `./convert a`, `./convert 42`, `./convert 42.5f`, `./convert nan`, `./convert +inf`, and an invalid string. For the other exercises check pointer equality and which derived class gets identified.
 
@@ -52,7 +52,7 @@ Run `./convert a`, `./convert 42`, `./convert 42.5f`, `./convert nan`, `./conver
 
 These checks are suggestions; the documentation update does not imply they were run.
 
-## Further Reading
+## References
 
 - [C++ reference](https://en.cppreference.com/w/cpp)
 - [C++ language guide](https://en.cppreference.com/w/cpp/language)
