@@ -6,8 +6,6 @@
 
 CPP03 introduces inheritance through game-style characters that can attack, take damage, and repair themselves. Derived classes specialize the state and behavior of a common base.
 
-Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
-
 ## Building
 
 Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercise folder, then launch its executable (see that folder's Makefile for its name). Use `make fclean` to clean generated files.
@@ -34,15 +32,9 @@ When a `ScavTrap` is created, its `ClapTrap` base part is initialized first. Whe
 
 The ex00 `ClapTrap` begins with 10 hit points, 10 energy points and 0 attack damage. Attacking or repairing uses an energy point and checks whether it is dead or out of energy. `takeDamage()` reduces hit points without allowing negative health. `ScavTrap` sets its own initial values in its constructors.
 
-### Implementation Details
+### Implementation Highlights
 
-| Component | Implementation |
-|---|---|
-| **Base class** | `ClapTrap` stores name, hit points, energy points, and attack damage. |
-| **Derived classes** | `ScavTrap` and `FragTrap` inherit common behavior and define their own initialization and special methods. |
-| **Attack and repair** | Check health and available energy before acting; successful actions consume energy. |
-| **Damage handling** | Reduces hit points, stopping at zero if incoming damage is greater than or equal to remaining health. |
-| **Object lifecycle** | Initializes the base-class subobject before the derived class and destroys them in reverse order. |
+The combat methods operate on the calling object's state: an attack consumes energy and **reports damage**, but does not modify a separate target object. Similarly, `ScavTrap::guardGate()` prints a mode message rather than maintaining an additional mode flag. This keeps the exercise focused on inheritance and method behavior rather than game mechanics.
 
 ## Validation Cases
 
