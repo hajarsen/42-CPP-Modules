@@ -8,26 +8,9 @@ CPP01 explores object lifetime, dynamic arrays, references, file streams, and di
 
 Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
 
-## Instructions
+## Building
 
-### Build and run
-
-These exercises use **C++98**, with `-Wall -Wextra -Werror -std=c++98` in their Makefiles. They are independent executables compiled in their respective folders.
-
-```bash
-git clone https://github.com/hajarsen/CPP01.git
-cd CPP01
-cd ex00
-make
-./Zombie
-cd ../ex04
-make
-printf 'hello world\n' > sample.txt
-./readFile sample.txt hello hi
-cat sample.txt.replace
-```
-
-Inside each exercise, use `make` to compile, `make clean` to remove objects, `make fclean` to remove the executable, or `make re` to rebuild. Check each Makefile for its executable name.
+Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercise folder, then launch its executable (see that folder's Makefile for its name). Use `make fclean` to clean generated files.
 
 ### Exercises
 
