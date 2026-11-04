@@ -14,22 +14,9 @@ The aim of this README is to help visitors understand both **what the programs d
 | `ex01` | `RPN` | `std::stack` and postfix evaluation |
 | `ex02` | `PmergeMe` | `std::vector`, `std::deque` and sorting |
 
-## Instructions
+## Building
 
-### Build
-
-Each exercise has its own Makefile. Use a C++ compiler and `make`; the projects use `-std=c++98 -Wall -Wextra -Werror`.
-
-```bash
-git clone https://github.com/hajarsen/CPP09.git
-cd CPP09
-
-cd ex00 && make && cd ..
-cd ex01 && make && cd ..
-cd ex02 && make && cd ..
-```
-
-Inside an exercise folder: `make clean` removes object files; `make fclean` removes objects and the executable; `make re` rebuilds.
+Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercise folder, then launch its executable (see that folder's Makefile for its name). Use `make fclean` to clean generated files.
 
 ---
 
