@@ -37,15 +37,16 @@ A pointer stores an address and can be reassigned or null; a reference names an 
 
 `ex04/main.cpp` uses `std::ifstream` and `std::ofstream` to create an output file with `.replace` appended. `ex05` stores pointers to `Harl` member functions and dispatches one through `(this->*pointer)()` based on the requested level.
 
-### Implementation Diagram
+### Implementation Details
 
-```text
-Local Zombie ───► destroyed on scope exit
-new Zombie   ───► pointer ───► delete
-
-HumanA ── Weapon& ──► existing Weapon
-HumanB ── Weapon* ──► NULL or existing Weapon
-```
+| Exercise | Implementation |
+|---|---|
+| **Zombie allocation** | Compares automatic object lifetime with objects returned by `newZombie()` and later released with `delete`. |
+| **Zombie horde** | Allocates multiple objects in a dynamic array, requiring matching array deallocation. |
+| **Pointer and reference semantics** | Demonstrates direct values, stored addresses, and references to the same object. |
+| **HumanA / HumanB** | `HumanA` stores a `Weapon&`; `HumanB` stores a nullable `Weapon*` and can receive a weapon later. |
+| **File replacement** | Reads an input file and writes the modified contents to a separate `.replace` file. |
+| **Harl dispatch** | Uses an array of member-function pointers to invoke the method matching the requested level. |
 
 ## Validation Cases
 
