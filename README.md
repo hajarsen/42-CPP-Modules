@@ -6,7 +6,7 @@
 
 CPP00 introduces C++98 syntax, standard input/output, and object-oriented design through a megaphone and an interactive phone book.
 
-Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
+Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
 
 ## Building
 
@@ -19,7 +19,7 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 | `ex00` | **Megaphone** | Convert command-line text to uppercase. |
 | `ex01` | **PhoneBook** | Store and search up to eight contacts using two classes. |
 
-## Resources — Understand the Concepts
+## Technical Overview
 
 ### 1. Streams and arguments
 
@@ -33,7 +33,7 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 After successfully adding a contact, the source calculates `(lastContactIndex + 1) % 8`. This wraps the next insertion position back to zero, overwriting an older contact once all eight slots are used. `std::setw(10)` formats a table column; long fields are shortened to nine characters plus a dot.
 
-### How it works
+### Implementation Diagram
 
 ```text
 PhoneBook
@@ -44,22 +44,15 @@ PhoneBook
 └──────────────────────────────────────┘
 ```
 
-## Practice and Testing
+## Validation Cases
 
 Run `./megaphone hello world` (notice how separate arguments are concatenated) and `./megaphone 'hello world'` (the space is preserved). In PhoneBook try `SEARCH` before `ADD`, create nine contacts, enter a non-numeric phone number, and select an invalid index.
 
-**What to watch for:** PhoneBook data exists only during the current run; it is not saved to disk. The source validates fields as printable text and requires digits for phone numbers.
+**Implementation notes:** PhoneBook data exists only during the current run; it is not saved to disk. The source validates fields as printable text and requires digits for phone numbers.
 
 The suggestions above are for your own testing; no automated results are claimed here.
 
-### Questions to consider
-
-- What does this exercise add compared with the previous one?
-- Which parts of the code manage data, and which perform operations?
-- How do errors and boundary cases affect the results?
-- Could you explain the diagram and the output in a 42 evaluation?
-
-## Useful Resources
+## References
 
 - [C++ language reference](https://en.cppreference.com/w/cpp)
 - [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
