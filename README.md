@@ -6,7 +6,7 @@
 
 CPP04 demonstrates dynamic dispatch through virtual functions, resource ownership through deep copying, and interfaces defined by abstract base classes.
 
-Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
+Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
 
 ## Building
 
@@ -20,7 +20,7 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 | `ex01` | **Brains** | Give animals an owned `Brain` and verify independent copies. |
 | `ex02` | **Abstract Animal** | Use an abstract `AAnimal` base with concrete derived types. |
 
-## Resources — Understand the Concepts
+## Technical Overview
 
 ### 1. Virtual methods and dispatch
 
@@ -34,7 +34,7 @@ The `Brain` class stores 100 ideas. Its copy constructor and assignment copy all
 
 `AAnimal` declares `virtual void makeSound() const = 0;`, making it abstract. You cannot construct `AAnimal` itself, but `Dog` and `Cat` can implement the interface. A virtual base destructor allows safe destruction through base pointers.
 
-### How it works
+### Implementation Diagram
 
 ```text
 Animal* base_ptr
@@ -46,22 +46,15 @@ Dog A → [Brain A] (independent)
 Dog B → [Brain B] (deep copy)
 ```
 
-## Practice and Testing
+## Validation Cases
 
 Compare output from Animal and WrongAnimal through base pointers. Copy a Dog or Cat, modify one Brain and verify the other is unchanged. Explain why `new AAnimal` would fail to compile.
 
-**What to watch for:** `Brain` is an educational example of owned state, not a general-purpose data structure. Tests should distinguish copying an object from copying a pointer.
+**Implementation notes:** `Brain` is an educational example of owned state, not a general-purpose data structure. Tests should distinguish copying an object from copying a pointer.
 
 The suggestions above are for your own testing; no automated results are claimed here.
 
-### Questions to consider
-
-- What does this exercise add compared with the previous one?
-- Which parts of the code manage data, and which perform operations?
-- How do errors and boundary cases affect the results?
-- Could you explain the diagram and the output in a 42 evaluation?
-
-## Useful Resources
+## References
 
 - [C++ language reference](https://en.cppreference.com/w/cpp)
 - [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
