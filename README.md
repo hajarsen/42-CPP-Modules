@@ -6,7 +6,7 @@
 
 CPP05 introduces robust class invariants, exceptions, and abstract classes through a bureaucracy simulation. Bureaucrats have grades and may sign or execute forms only when they satisfy each form's requirements.
 
-This README explains **what each exercise demonstrates**, the key ideas behind the code, and ways to explore them yourself.
+The sections below describe the exercise implementations and their underlying C++ concepts.
 
 ## Building
 
@@ -14,20 +14,20 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 ### Exercises
 
-| Folder | Topic | What it does |
+| Folder | Topic | Purpose |
 |---|---|---|
 | `ex00` | **Bureaucrat** | Construct objects with valid grades; reject invalid grades. |
 | `ex01` | **Form** | Introduce signing requirements and signed state. |
 | `ex02` | **AForm** | Introduce abstract forms and different executable actions. |
 | `ex03` | **Intern** | Choose a concrete form by name with a factory-like helper. |
 
-## Resources — Key Concepts
+## Technical Overview
 
 ### 1. Grades are invariants
 
 A Bureaucrat's grade lies in the interval 1–150, where **1 is the highest rank**. Code that constructs a grade outside this range raises an exception. A form specifies separate grades to sign and execute it, so the caller must satisfy the relevant limit.
 
-### 2. Why exceptions?
+### 2. Exception handling
 
 Instead of silently creating an invalid object or allowing an illegal operation, a function can `throw` an exception. The caller can `catch` the error and report it. The source defines exceptions for grades and unsigned forms, providing meaningful error messages through `what()`.
 
@@ -39,7 +39,7 @@ Instead of silently creating an invalid object or allowing an illegal operation,
 
 `Intern::makeForm(name, target)` matches a string against three supported names and calls the corresponding creation method using an array of member-function pointers. Unknown names raise `FormNotFoundException`. This isolates the choice of class from the caller.
 
-### Visual summary
+### Implementation Diagram
 
 ```text
 Bureaucrat (grade 1..150)
@@ -52,7 +52,7 @@ Bureaucrat (grade 1..150)
 Intern -- name + target --> concrete form
 ```
 
-## Tests to Try
+## Validation Cases
 
 Create a Bureaucrat with grades 1, 150, 0 and 151. Try signing a form with too-low authority, executing before signing, and asking the Intern for an unknown form. Compare the errors you receive.
 
@@ -60,7 +60,7 @@ Create a Bureaucrat with grades 1, 150, 0 and 151. Try signing a form with too-l
 
 These checks are suggestions; the documentation update does not imply they were run.
 
-## Further Reading
+## References
 
 - [C++ reference](https://en.cppreference.com/w/cpp)
 - [C++ language guide](https://en.cppreference.com/w/cpp/language)
