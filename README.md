@@ -44,15 +44,14 @@ For the input `2011-01-05 | 3`, the program uses the rate for **2011-01-03** (4)
 
 `std::map<std::string, double>` keeps date keys sorted. With dates written as `YYYY-MM-DD`, their string order agrees with chronological order for valid dates.
 
-The source uses `upper_bound(date)` and steps back one iterator:
+The implementation uses `upper_bound(date)` and moves to the preceding entry:
 
-```text
-Stored dates:  Jan 01 ── Jan 03 ───── Jan 10
-Query:                          Jan 05
-upper_bound(Jan 05) ────────────────► Jan 10
-Previous entry     ◄─────────────── Jan 03
-Chosen rate: Jan 03
-```
+| Operation | Date |
+|---|---|
+| Available rate dates | 2011-01-01, 2011-01-03, 2011-01-10 |
+| Requested date | 2011-01-05 |
+| `upper_bound("2011-01-05")` | 2011-01-10 |
+| Previous map entry | **2011-01-03** — the selected rate |
 
 `upper_bound` returns the first key **greater than** the query; the previous key is the latest available date **not later than** the query. If the query precedes every key, no earlier rate exists.
 
@@ -93,16 +92,17 @@ The program uses `std::stack<int>`. Numbers are pushed; operators pop the top tw
 
 ### Evaluation example
 
-```text
-Token       Stack (bottom → top)
-  3         [3]
-  4         [3, 4]
-  +         [7]          (3 + 4)
-  2         [7, 2]
-  *         [14]         (7 × 2)
+For the postfix expression `3 4 + 2 *`:
 
-Result: 14
-```
+| Token | Stack (bottom → top) | Operation |
+|---|---|---|
+| `3` | `[3]` | Push operand |
+| `4` | `[3, 4]` | Push operand |
+| `+` | `[7]` | Replace the operands with 3 + 4 |
+| `2` | `[7, 2]` | Push operand |
+| `*` | `[14]` | Replace the operands with 7 × 2 |
+
+**Result: 14.**
 
 For subtraction and division, **operand order matters**. The first popped value is the right operand; the second popped value is the left operand.
 
@@ -133,34 +133,22 @@ Both versions follow a **pair-based merge-insertion strategy** inspired by **For
 
 ### Step 1 — Form pairs
 
-Take the example:
+For input `8 3 5 1 9 4 7 2`, adjacent elements are paired and each pair is ordered:
 
-```text
-Input:      8  3  5  1  9  4  7  2
+| Input pair | Ordered pair |
+|---|---|
+| (8, 3) | (3, 8) |
+| (5, 1) | (1, 5) |
+| (9, 4) | (4, 9) |
+| (7, 2) | (2, 7) |
 
-Pairs:     (8,3) (5,1) (9,4) (7,2)
-Ordered:   (3,8) (1,5) (4,9) (2,7)
-Large values: [8, 5, 9, 7]
-```
+The larger elements form the next recursive input: `[8, 5, 9, 7]`.
 
 ### Step 2 — Sort the larger values recursively
 
-```text
-[8, 5, 9, 7]
-     │ recursive sort
-     ▼
-[5, 7, 8, 9]
+Sorting the larger elements produces `[5, 7, 8, 9]`. Reordering the original pairs by their larger partner gives **(1, 5), (2, 7), (3, 8), (4, 9)**.
 
-Corresponding ordered pairs:
-(1,5) (2,7) (3,8) (4,9)
-```
-
-The main chain begins with the first smaller element and the sorted larger elements:
-
-```text
-Main chain:   [1, 5, 7, 8, 9]
-Still pending: 2, 3, 4
-```
+The main chain starts as `[1, 5, 7, 8, 9]`, while `2`, `3`, and `4` remain pending insertion.
 
 ### Step 3 — Insert pending values
 
@@ -168,18 +156,11 @@ The code locates each pending value's **larger partner** using `std::find`. It t
 
 That boundary is useful because each smaller value is known to be ≤ its own partner.
 
-```text
-[1, 5, 7, 8, 9]
-      │ insert 3 before 8
-      ▼
-[1, 3, 5, 7, 8, 9]
-      │ insert 2 before 7
-      ▼
-[1, 2, 3, 5, 7, 8, 9]
-      │ insert 4 before 9
-      ▼
-[1, 2, 3, 4, 5, 7, 8, 9]
-```
+| Insertion | Partner | Main chain after insertion |
+|---|---|---|
+| Insert `3` | `8` | `[1, 3, 5, 7, 8, 9]` |
+| Insert `2` | `7` | `[1, 2, 3, 5, 7, 8, 9]` |
+| Insert `4` | `9` | `[1, 2, 3, 4, 5, 7, 8, 9]` |
 
 Odd-length inputs have one unpaired value; the code inserts it into the chain later.
 
@@ -225,6 +206,14 @@ make
 
 The parser rejects empty input, zero, negative values and invalid integer arguments. Check that the `After:` output is sorted; the new README has not been used as an automated test of the program.
 
+### Implementation Details
+
+| Program | Primary data structure | Key operation | Important consideration |
+|---|---|---|---|
+| **Bitcoin Exchange** | `std::map<std::string, double>` | `upper_bound()` and predecessor lookup | Database file must be supplied; invalid dates and values are rejected. |
+| **RPN** | `std::stack<int>` | Push operands; pop and apply each operator | Operand order matters for subtraction and division. |
+| **PmergeMe** | `std::vector<int>` and `std::deque<int>` | Recursive pair ordering, `std::find`, `lower_bound`, insertion | Middle insertion and linear searches affect runtime despite comparison-efficient ordering. |
+
 ---
 
 ## Summary
@@ -245,4 +234,4 @@ The parser rejects empty input, zero, negative values and invalid integer argume
 
 ### AI Usage
 
-AI assistance was used to explain the existing implementation, prepare diagrams and suggest tests. The program source files were not modified, and no new runtime benchmark results are claimed.
+AI assistance was used to explain the existing implementation, organize worked examples and suggest tests. The program source files were not modified, and no new runtime benchmark results are claimed.
