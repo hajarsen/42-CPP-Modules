@@ -6,7 +6,7 @@
 
 CPP07 introduces C++ templates, which let you write reusable algorithms and containers without duplicating logic for every type.
 
-This README explains **what each exercise demonstrates**, the key ideas behind the code, and ways to explore them yourself.
+The sections below describe the exercise implementations and their underlying C++ concepts.
 
 ## Building
 
@@ -14,13 +14,13 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 
 ### Exercises
 
-| Folder | Topic | What it does |
+| Folder | Topic | Purpose |
 |---|---|---|
 | `ex00` | **Whatever** | Write generic `swap`, `min`, and `max` functions. |
 | `ex01` | **Iter** | Apply a function to every element of an array. |
 | `ex02` | **Array** | Implement a templated, dynamically allocated array with bounds checks. |
 
-## Resources — Key Concepts
+## Technical Overview
 
 ### 1. Function templates
 
@@ -38,7 +38,7 @@ The `iter` exercise accepts a pointer to an array, the number of elements, and a
 
 In the current code, `Array::operator=` deletes its existing storage before allocating the replacement. If allocation fails, that operation does not provide a strong exception-safety guarantee. This is a useful discussion point about safe resource management.
 
-### Visual summary
+### Implementation Diagram
 
 ```text
 Template swap<T>(a, b)
@@ -48,7 +48,7 @@ Template swap<T>(a, b)
 Array<T> : owns T[] + size + checked [] access
 ```
 
-## Tests to Try
+## Validation Cases
 
 Try `swap` on both integers and strings, call `iter` on an array, copy a nonempty Array, modify only the copy, and access an out-of-range index. Confirm the exception is handled.
 
@@ -56,7 +56,7 @@ Try `swap` on both integers and strings, call `iter` on an array, copy a nonempt
 
 These checks are suggestions; the documentation update does not imply they were run.
 
-## Further Reading
+## References
 
 - [C++ reference](https://en.cppreference.com/w/cpp)
 - [C++ language guide](https://en.cppreference.com/w/cpp/language)
