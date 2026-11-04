@@ -34,17 +34,15 @@ When a `ScavTrap` is created, its `ClapTrap` base part is initialized first. Whe
 
 The ex00 `ClapTrap` begins with 10 hit points, 10 energy points and 0 attack damage. Attacking or repairing uses an energy point and checks whether it is dead or out of energy. `takeDamage()` reduces hit points without allowing negative health. `ScavTrap` sets its own initial values in its constructors.
 
-### Implementation Diagram
+### Implementation Details
 
-```text
-             ClapTrap
-             /     \
-       ScavTrap   FragTrap
-
-Attack: alive? → energy left? → spend 1 energy
-Damage: reduce HP, stop at 0
-Repair: alive + energy? → increase HP
-```
+| Component | Implementation |
+|---|---|
+| **Base class** | `ClapTrap` stores name, hit points, energy points, and attack damage. |
+| **Derived classes** | `ScavTrap` and `FragTrap` inherit common behavior and define their own initialization and special methods. |
+| **Attack and repair** | Check health and available energy before acting; successful actions consume energy. |
+| **Damage handling** | Reduces hit points, stopping at zero if incoming damage is greater than or equal to remaining health. |
+| **Object lifecycle** | Initializes the base-class subobject before the derived class and destroys them in reverse order. |
 
 ## Validation Cases
 
