@@ -34,14 +34,17 @@ The default constructor initializes the raw number to zero. A copy constructor b
 
 Comparison operators compare stored raw integers. `+`, `-`, `*`, and `/` in the current ex02 implementation convert operands to floating point, calculate, then construct a `Fixed` result. Prefix `++a` returns the updated object; postfix `a++` returns a copy of the previous value. Each increment changes the raw value by 1—that is, 1/256 of a unit.
 
-### Implementation Diagram
+### Implementation Details
 
-```text
-Float 1.5  ─×256─► Raw 384 ─÷256─► Float 1.5
+| Feature | Implementation |
+|---|---|
+| **Internal storage** | A signed integer stores the raw value with 8 fractional bits. |
+| **Float conversion** | The constructor rounds `input × 256`; `toFloat()` divides the stored value by 256. |
+| **Copy semantics** | The copy constructor and assignment operator copy the raw value. |
+| **Comparison** | Relational operators compare the raw integer values directly. |
+| **Arithmetic** | The current implementation converts operands to floats, computes the result, and constructs a new `Fixed` value. |
+| **Increment/decrement** | Prefix returns `Fixed&` after changing the raw value; postfix returns a `Fixed` copy of the previous state. |
 
-++a : increment raw value, return current object
- a++: save old copy, increment, return old copy
-```
 
 ## Validation Cases
 
