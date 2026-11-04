@@ -34,17 +34,16 @@ The `Brain` class stores 100 ideas. Its copy constructor and assignment copy all
 
 `AAnimal` declares `virtual void makeSound() const = 0;`, making it abstract. You cannot construct `AAnimal` itself, but `Dog` and `Cat` can implement the interface. A virtual base destructor allows safe destruction through base pointers.
 
-### Implementation Diagram
+### Implementation Details
 
-```text
-Animal* base_ptr
-       │ virtual makeSound()
-       ├────────► Dog::makeSound()
-       └────────► Cat::makeSound()
-
-Dog A → [Brain A] (independent)
-Dog B → [Brain B] (deep copy)
-```
+| Feature | Implementation |
+|---|---|
+| **Virtual dispatch** | `Animal::makeSound()` resolves to the concrete `Dog` or `Cat` behavior when called through a base-class pointer or reference. |
+| **Nonvirtual comparison** | `WrongAnimal` and `WrongCat` illustrate the difference when a method is not virtual. |
+| **Resource ownership** | `Dog` and `Cat` manage `Brain` objects; copy operations must preserve independent owned state. |
+| **Brain copying** | The `Brain` copy constructor and assignment operator copy its array of 100 ideas. |
+| **Abstract interface** | `AAnimal` declares a pure virtual `makeSound()`, requiring concrete derived classes to provide an implementation. |
+| **Polymorphic destruction** | Virtual base destructors support deletion through base-class pointers. |
 
 ## Validation Cases
 
