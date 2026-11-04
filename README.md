@@ -6,7 +6,7 @@
 
 CPP03 introduces inheritance through game-style characters that can attack, take damage, and repair themselves. Derived classes specialize the state and behavior of a common base.
 
-Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
+Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
 
 ## Building
 
@@ -20,7 +20,7 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 | `ex01` | **ScavTrap** | Derive from ClapTrap and add gate-keeper behavior. |
 | `ex02` | **FragTrap** | Add another specialized derived class. |
 
-## Resources — Understand the Concepts
+## Technical Overview
 
 ### 1. Base and derived classes
 
@@ -34,7 +34,7 @@ When a `ScavTrap` is created, its `ClapTrap` base part is initialized first. Whe
 
 The ex00 `ClapTrap` begins with 10 hit points, 10 energy points and 0 attack damage. Attacking or repairing uses an energy point and checks whether it is dead or out of energy. `takeDamage()` reduces hit points without allowing negative health. `ScavTrap` sets its own initial values in its constructors.
 
-### How it works
+### Implementation Diagram
 
 ```text
              ClapTrap
@@ -46,22 +46,15 @@ Damage: reduce HP, stop at 0
 Repair: alive + energy? → increase HP
 ```
 
-## Practice and Testing
+## Validation Cases
 
 Trace constructor order in ex01/ex02. Try an attack with no energy, repair after reaching zero health, and repeated damage. Compare default health/energy values and specialized methods across classes.
 
-**What to watch for:** Health and energy counters are ordinary state variables; they are not an entire game engine. The example methods report actions through terminal output.
+**Implementation notes:** Health and energy counters are ordinary state variables; they are not an entire game engine. The example methods report actions through terminal output.
 
 The suggestions above are for your own testing; no automated results are claimed here.
 
-### Questions to consider
-
-- What does this exercise add compared with the previous one?
-- Which parts of the code manage data, and which perform operations?
-- How do errors and boundary cases affect the results?
-- Could you explain the diagram and the output in a 42 evaluation?
-
-## Useful Resources
+## References
 
 - [C++ language reference](https://en.cppreference.com/w/cpp)
 - [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
