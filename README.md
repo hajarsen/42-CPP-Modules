@@ -6,7 +6,7 @@
 
 CPP02 builds a `Fixed` number class step by step: canonical object construction, integer and float conversions, arithmetic operators, comparisons, and increments.
 
-Each exercise builds on the previous concepts. This guide explains **what the code does, why the concepts matter, and how to explore them**.
+Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
 
 ## Building
 
@@ -20,9 +20,9 @@ Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercis
 | `ex01` | **Numeric conversion** | Convert integers and floats to and from fixed-point. |
 | `ex02` | **Operators** | Overload arithmetic, comparison, increment/decrement, min and max. |
 
-## Resources — Understand the Concepts
+## Technical Overview
 
-### 1. What fixed-point means
+### 1. Fixed-point representation
 
 Instead of storing a fractional value directly, the class stores a scaled integer `value`. The header declares `fractionalBits = 8`, so the scale factor is `2^8 = 256`. For example, 1.5 corresponds to the raw integer 384. `toFloat()` divides by 256.
 
@@ -34,7 +34,7 @@ The default constructor initializes the raw number to zero. A copy constructor b
 
 Comparison operators compare stored raw integers. `+`, `-`, `*`, and `/` in the current ex02 implementation convert operands to floating point, calculate, then construct a `Fixed` result. Prefix `++a` returns the updated object; postfix `a++` returns a copy of the previous value. Each increment changes the raw value by 1—that is, 1/256 of a unit.
 
-### How it works
+### Implementation Diagram
 
 ```text
 Float 1.5  ─×256─► Raw 384 ─÷256─► Float 1.5
@@ -43,22 +43,15 @@ Float 1.5  ─×256─► Raw 384 ─÷256─► Float 1.5
  a++: save old copy, increment, return old copy
 ```
 
-## Practice and Testing
+## Validation Cases
 
 Test `Fixed(1.5f).getRawBits()` (expected raw 384), comparisons, copies, and prefix versus postfix increments. Try values that require rounding and observe the limited fractional precision.
 
-**What to watch for:** These are fixed-point approximations, not arbitrary-precision numbers. The current division operator has no explicit guard against dividing by zero, so do not assume safe behavior for that case.
+**Implementation notes:** These are fixed-point approximations, not arbitrary-precision numbers. The current division operator has no explicit guard against dividing by zero, so do not assume safe behavior for that case.
 
 The suggestions above are for your own testing; no automated results are claimed here.
 
-### Questions to consider
-
-- What does this exercise add compared with the previous one?
-- Which parts of the code manage data, and which perform operations?
-- How do errors and boundary cases affect the results?
-- Could you explain the diagram and the output in a 42 evaluation?
-
-## Useful Resources
+## References
 
 - [C++ language reference](https://en.cppreference.com/w/cpp)
 - [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
