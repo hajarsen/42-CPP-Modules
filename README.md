@@ -38,16 +38,9 @@ For sorted values `[2, 6, 9, 20]`, the adjacent gaps are 4, 3 and 11, so the sho
 
 `std::stack` is an adaptor exposing `push`, `pop`, and `top`, but no public iterators. The `MutantStack` class derives from `std::stack` and exposes `begin()` and `end()` using the protected underlying container `c`.
 
-### Implementation Details
+### Implementation Highlights
 
-| Exercise | Implementation |
-|---|---|
-| **Easyfind** | Applies an STL search algorithm to an iterator range to locate an integer. |
-| **Span capacity** | `Span::addNumber()` rejects insertions when its configured capacity is reached. |
-| **Shortest span** | Copies and sorts the stored numbers, then finds the smallest difference between adjacent values. |
-| **Longest span** | Finds the minimum and maximum stored values and returns their difference. |
-| **Insufficient data** | Span calculations throw `NoSpanException` when fewer than two numbers are stored. |
-| **MutantStack** | Inherits from `std::stack` and exposes iterators to its underlying container through `begin()` and `end()`. |
+**Span calculations use different strategies:** the shortest span sorts a copy of the stored numbers before comparing adjacent differences, while the longest span can be determined directly from the minimum and maximum. `MutantStack` exposes iterators through the underlying container while retaining the standard stack operations.
 
 ## Validation Cases
 
@@ -63,6 +56,3 @@ These checks are suggestions; the documentation update does not imply they were 
 - [C++ language guide](https://en.cppreference.com/w/cpp/language)
 - [GNU Make](https://www.gnu.org/software/make/manual/)
 
-### AI Usage
-
-AI assistance was used to organize the documentation, clarify concepts and prepare examples. **No source code was changed.**
