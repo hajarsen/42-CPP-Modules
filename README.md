@@ -50,6 +50,3 @@ The suggestions above are for your own testing; no automated results are claimed
 - [C++98 classes and language basics](https://en.cppreference.com/w/cpp/language)
 - [GNU Make manual](https://www.gnu.org/software/make/manual/)
 
-### AI Usage
-
-AI assistance was used to organize the documentation, clarify concepts and prepare examples. **Source code was not changed** by this README update.
