@@ -6,8 +6,6 @@
 
 CPP04 demonstrates dynamic dispatch through virtual functions, resource ownership through deep copying, and interfaces defined by abstract base classes.
 
-Each exercise builds on the previous concepts. The sections below describe the implementation, underlying C++ concepts, and expected behavior.
-
 ## Building
 
 Each `exXX` folder has its own **C++98 Makefile**. Run `make` inside the exercise folder, then launch its executable (see that folder's Makefile for its name). Use `make fclean` to clean generated files.
@@ -34,16 +32,9 @@ The `Brain` class stores 100 ideas. Its copy constructor and assignment copy all
 
 `AAnimal` declares `virtual void makeSound() const = 0;`, making it abstract. You cannot construct `AAnimal` itself, but `Dog` and `Cat` can implement the interface. A virtual base destructor allows safe destruction through base pointers.
 
-### Implementation Details
+### Implementation Highlights
 
-| Feature | Implementation |
-|---|---|
-| **Virtual dispatch** | `Animal::makeSound()` resolves to the concrete `Dog` or `Cat` behavior when called through a base-class pointer or reference. |
-| **Nonvirtual comparison** | `WrongAnimal` and `WrongCat` illustrate the difference when a method is not virtual. |
-| **Resource ownership** | `Dog` and `Cat` manage `Brain` objects; copy operations must preserve independent owned state. |
-| **Brain copying** | The `Brain` copy constructor and assignment operator copy its array of 100 ideas. |
-| **Abstract interface** | `AAnimal` declares a pure virtual `makeSound()`, requiring concrete derived classes to provide an implementation. |
-| **Polymorphic destruction** | Virtual base destructors support deletion through base-class pointers. |
+`Dog` performs a deep copy by constructing a new `Brain` from the source object's `Brain`. Its assignment operator allocates the replacement **before deleting the existing object**, avoiding loss of the original resource if allocation fails. Copying an animal therefore preserves independent mutable state rather than sharing the same `Brain` pointer.
 
 ## Validation Cases
 
